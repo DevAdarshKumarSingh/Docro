@@ -104,6 +104,8 @@
 
     const micButton = document.createElement('button');
     micButton.textContent = '🎤';
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<span class="material-icons">mic</span>
     micButton.title = "Voice Command";
     Object.assign(micButton.style, {
       position: 'fixed',
@@ -404,6 +406,132 @@ function disableKeys(e) {
     return false;
   }
 }
+  <div id="app"></div>
+<script src="https://unpkg.com/vue@3"></script>
+<script>
+const IS_DELETED = false;
+const REQUIRES_PAID = false;
+
+const App = {
+  template: `
+    <transition name="fade" mode="out-in">
+      <div v-if="deleted" class="center-page red">
+        <h1>This website is deleted.</h1>
+      </div>
+      <div v-else-if="paid" class="center-page dark">
+        <div>
+          <h1>Access Denied</h1>
+          <p>This site requires a <b>paid version</b>.</p>
+          <button @click="payNow" class="pay-btn">Pay Now</button>
+        </div>
+      </div>
+      <div v-else class="site-content">
+        <h2 style="text-align:center;">Welcome to Docro</h2>
+      </div>
+    </transition>
+  `,
+  data() {
+    return {
+      deleted: IS_DELETED,
+      paid: REQUIRES_PAID
+    };
+  },
+  methods: {
+    payNow() {
+      window.open("https://your-payment-link.com", "_blank");
+    },
+    trapDevTools() {
+      const detect = () => {
+        const start = performance.now();
+        debugger;
+        const diff = performance.now() - start;
+        if (diff > 100) location.reload();
+      };
+      setInterval(detect, 1000);
+
+      const el = new Image();
+      Object.defineProperty(el, 'id', {
+        get() {
+          location.reload();
+        }
+      });
+      console.log(el);
+
+      const resizeTrap = () => {
+        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+          location.reload();
+        }
+      };
+      window.addEventListener('resize', resizeTrap);
+    }
+  },
+  mounted() {
+    // Anti copy/dev tool
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    ['copy', 'cut', 'paste'].forEach(evt => document.addEventListener(evt, e => e.preventDefault()));
+    document.addEventListener('keydown', e => {
+      if (
+        e.keyCode === 123 ||
+        (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && e.key.toUpperCase() === 'U')
+      ) e.preventDefault();
+    });
+
+    // Trap developer tools hard
+    this.trapDevTools();
+
+    // Offline PWA
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE = 'docro-v4';
+        const ASSETS = ['.', './index.html'];
+        self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))));
+        self.addEventListener('fetch', e => {
+          e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swURL = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swURL);
+    }
+  }
+};
+Vue.createApp(App).mount('#app');
+</script>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.center-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  flex-direction: column;
+  text-align: center;
+}
+.center-page.dark { background: #000; color: #fff; }
+.center-page.red { background: #fff0f0; color: #b30000; }
+.pay-btn {
+  background: #00cec9;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+.pay-btn:hover {
+  background: #009e9d;
+}
+</style>
+
 </script>
 </body>
 </html>
