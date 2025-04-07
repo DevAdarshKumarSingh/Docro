@@ -75,6 +75,8 @@
 <body :class="{ light: !isDark }" oncontextmenu="return false;" onkeydown="return disableKeys(event)">
 
 <div id="app">
+  
+  
   <!-- Navbar -->
   <nav class="flex flex-wrap justify-between items-center px-6 py-4 glossy text-white">
     <div class="flex items-center gap-3">
@@ -88,7 +90,207 @@
       <li><button @click="toggleTheme" class="text-white">{{ isDark ? 'Light' : 'Dark' }} Mode</button></li>
     </ul>
   </nav>
+  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      console.warn("Speech recognition not supported in this browser.");
+      return;
+    }
 
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    const micButton = document.createElement('button');
+    micButton.textContent = '🎤';
+    micButton.title = "Voice Command";
+    Object.assign(micButton.style, {
+      position: 'fixed',
+      bottom: '90px',
+      right: '20px',
+      zIndex: '9999',
+      background: '#0f0f0f',
+      color: '#00ffff',
+      border: '2px solid #00ffff',
+      padding: '10px 14px',
+      borderRadius: '50%',
+      fontSize: '20px',
+      cursor: 'pointer',
+      boxShadow: '0 0 10px #00ffff'
+    });
+
+    document.body.appendChild(micButton);
+
+    micButton.onclick = () => {
+      recognition.start();
+    };
+
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript.toLowerCase().trim();
+      console.log("Voice Command:", transcript);
+
+      // Subject trigger
+      const openMatch = transcript.match(/open subject (.+)/);
+      if (openMatch && openMatch[1]) {
+        const subjectName = openMatch[1].replace(/\b\w/g, c => c.toUpperCase()).trim();
+
+        const vueApp = document.querySelector('#app')?.__vue_app__;
+        if (vueApp && vueApp._instance?.ctx?.selectSubject) {
+          const allSubjects = Object.keys(vueApp._instance.ctx.pdfData);
+          const found = allSubjects.find(s => s.toLowerCase() === subjectName.toLowerCase());
+
+          if (found) {
+            vueApp._instance.ctx.selectSubject(found);
+          } else {
+            alert(`Subject "${subjectName}" not found`);
+          }
+        }
+        return;
+      }
+
+      // Basic commands
+      if (transcript.includes("open this")) {
+        document.querySelector('#subjects')?.scrollIntoView({ behavior: "smooth" });
+      }
+      else if (transcript.includes("go to about")) {
+        document.querySelector('#about')?.scrollIntoView({ behavior: "smooth" });
+      }
+      else if (transcript.includes("dark mode")) {
+        const btn = [...document.querySelectorAll('button')].find(b => b.textContent.toLowerCase().includes('dark mode'));
+        btn?.click();
+      }
+    };
+
+    recognition.onerror = function(e) {
+      console.warn("Speech recognition error:", e.error);
+    };
+  });
+</script>
+  <script>
+  function handleSearchInput(query) {
+    const suggestionsEl = document.getElementById("searchSuggestions");
+    const input = query.trim().toLowerCase();
+    suggestionsEl.innerHTML = "";
+
+    if (!input) {
+      suggestionsEl.classList.add("hidden");
+      return;
+    }
+
+    const vueApp = document.querySelector('#app')?.__vue_app__;
+    if (!vueApp) return;
+
+    const { pdfData, selectSubject } = vueApp._instance.ctx;
+
+    let results = [];
+
+    for (let subject in pdfData) {
+      if (subject.toLowerCase().includes(input)) {
+        results.push({ subject, title: null });
+      }
+
+      for (let pdf of pdfData[subject]) {
+        if (pdf.title.toLowerCase().includes(input)) {
+          results.push({ subject, title: pdf.title });
+        }
+      }
+    }
+
+    if (results.length === 0) {
+      suggestionsEl.classList.add("hidden");
+      return;
+    }
+
+    suggestionsEl.classList.remove("hidden");
+
+    for (let res of results) {
+      const li = document.createElement("li");
+      li.className = "px-4 py-2 hover:bg-sky-200 cursor-pointer rounded-lg";
+      li.textContent = res.title ? `${res.title} — ${res.subject}` : res.subject;
+
+      li.onclick = () => {
+        suggestionsEl.classList.add("hidden");
+        document.getElementById("pdfSearchInput").value = "";
+        selectSubject(res.subject);
+
+        setTimeout(() => {
+          const modal = document.querySelector(".fixed.inset-0");
+          if (res.title) {
+            const items = modal.querySelectorAll("li span");
+            for (let el of items) {
+              if (el.textContent.toLowerCase() === res.title.toLowerCase()) {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                el.style.background = "#ffffcc";
+                setTimeout(() => el.style.background = "", 2000);
+                break;
+              }
+            }
+          }
+        }, 500);
+      };
+
+      suggestionsEl.appendChild(li);
+    }
+  }
+
+  function clearSearch() {
+    document.getElementById("pdfSearchInput").value = "";
+    document.getElementById("searchSuggestions").classList.add("hidden");
+  }
+
+  function startVoiceSearch() {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert("Your browser does not support voice search");
+      return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = function (event) {
+      const speech = event.results[0][0].transcript;
+      document.getElementById("pdfSearchInput").value = speech;
+      handleSearchInput(speech);
+    };
+
+    recognition.onerror = function (e) {
+      console.error("Speech recognition error:", e);
+    };
+  }
+
+  // Keyboard shortcut CTRL + K to focus search
+  document.addEventListener("keydown", function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      document.getElementById("pdfSearchInput").focus();
+    }
+  });
+</script>
+<div class="max-w-2xl mx-auto mb-6 px-2 relative">
+  <div class="relative rounded-xl shadow-md overflow-hidden flex items-center bg-white text-black">
+    <input
+      id="pdfSearchInput"
+      type="text"
+      placeholder="Search PDFs or Chapters (type or speak)"
+      class="flex-grow px-4 py-3 text-sm sm:text-base outline-none"
+      oninput="handleSearchInput(this.value)"
+    />
+    <button onclick="startVoiceSearch()" class="px-3 text-gray-500 hover:text-sky-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 1v2m0 18v2m9-9h2M1 12H3m15.36 6.36l1.42 1.42M4.22 4.22l1.42 1.42M17.66 6.34l1.42-1.42M6.34 17.66l-1.42 1.42" />
+      </svg>
+    </button>
+    <button onclick="clearSearch()" class="px-3 text-gray-500 hover:text-red-500">
+      ✕
+    </button>
+  </div>
+  <ul id="searchSuggestions" class="absolute w-full bg-white text-black mt-2 rounded-xl shadow-lg max-h-60 overflow-y-auto z-50 hidden text-sm sm:text-base"></ul>
+</div>
   <!-- Marquee -->
   <marquee class="bg-sky-950 text-white py-2 font-semibold">Welcome to the Docro — Where Pending Work Meets Completion.✨</marquee>
 
