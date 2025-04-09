@@ -363,6 +363,24 @@
   <!-- Marquee -->
   <marquee class="bg-sky-950 text-white py-2 font-semibold">Welcome to the Docro — Where Pending Work Meets Completion.✨</marquee>
 
+
+<!-- 📢 Temporary Notice Bar -->
+<div id="notice-banner" style="display:none;position:fixed;top:0;left:0;width:100%;background:#222;color:#fff;text-align:center;padding:10px 15px;font-size:15px;z-index:10000;border-bottom:2px solid #00f0ff;font-family:'Segoe UI',sans-serif;">
+  ⚠️ Due to health issues, I couldn’t upload the Work, Power & Energy in the Physics, Hindi, and Maths work. It will be uploaded on 10th April before 12:00 PM. <br/>Thank you for your patience — sorry for the inconvenience!
+</div>
+
+<script>
+  // Toggle this to true/false to show/hide the notice
+  const showNotice = true;
+
+  if (showNotice) {
+    document.getElementById('notice-banner').style.display = 'block';
+    // Optional: Push content down
+    const app = document.getElementById('app');
+    if (app) app.style.marginTop = '50px';
+  }
+</script>
+
   <!-- Subject Section -->
   <section id="subjects" class="py-12 px-6">
     <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 text-sky-300">Subjects</h2>
