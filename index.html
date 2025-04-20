@@ -15,19 +15,13 @@
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.body.innerHTML = `
-      <div style="height:100vh;display:flex;justify-content:center;align-items:center;background:#0f0f0f;color:#00f0ff;font-family:'Segoe UI',sans-serif;text-align:center;padding:20px;">
-        <div>
-          <h1 style="font-size:2rem;margin-bottom:10px;">🚫 Docro is currently closed</h1>
-          <p style="font-size:1.2rem;">
-Docro is currently inaccessible due to the expiration of the hosting platform’s premium membership. Access will be restored upon renewal, with 5 days remaining to complete the process.  
-Additionally, please note that the domain has not yet been purchased. </p>
-        </div>
-      </div>
-    `;
-    document.body.style.margin = "0";
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "842b5c0d-df00-4365-a563-03465c0e836f",
+    });
   });
 </script>
 
