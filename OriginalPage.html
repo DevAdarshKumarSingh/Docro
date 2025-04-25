@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Docro </title>
+  <title> Docro By Adarsh </title>
   <link rel="icon" href="https://i.imgur.com/XXWgcOR.png">
 
   <!-- Tailwind CSS -->
@@ -15,6 +15,7 @@
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -25,6 +26,7 @@
     });
   });
 </script>
+  
      <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -88,7 +90,7 @@
 <div id="name-popup" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:'Segoe UI',sans-serif;">
   <div style="background:#121212;border:1px solid #2c2c2c;border-radius:20px;padding:30px 40px;text-align:center;max-width:400px;width:90%;box-shadow:0 0 20px #00f0ff;animation:fadeIn 0.4s ease;">
     <h2 style="color:#00f0ff;margin-bottom:15px;font-size:24px;">👋 Hey there!</h2>
-    <p style="font-size:16px;color:#aaa;margin-bottom:20px;">Enter your name by which we call u.</p>
+    <p style="font-size:16px;color:#aaa;margin-bottom:20px;">Enter Your Name By Which We Can Call You.</p>
     <input id="username-input" type="text" placeholder="Your name" style="padding:12px 16px;border:none;border-radius:8px;width:100%;font-size:16px;margin-bottom:20px;background:#1e1e1e;color:#fff;">
     <br />
     <button onclick="showWelcome()" style="background:#00f0ff;color:#000;border:none;padding:12px 25px;border-radius:8px;font-size:16px;cursor:pointer;">Continue</button>
@@ -112,10 +114,10 @@
 }
 </style>
 
-<!-- 💡 JS Logic for First-Time Only Popup (15-day expire) -->
+<!-- 💡 JS Logic for First-Time Only Popup (2-day expire) -->
 <script>
   const STORAGE_KEY = 'docro_user';
-  const EXPIRY_DAYS = 5;
+  const EXPIRY_DAYS = 2;
 
   function showWelcome() {
     const name = document.getElementById('username-input').value.trim();
@@ -164,7 +166,7 @@
     <ul class="flex flex-wrap gap-4 text-sm md:text-lg mt-2 md:mt-0">
       <li><a href="#subjects" class="hover:text-sky-300">Subjects</a></li>
       <li><a href="#about" class="hover:text-sky-300">About</a></li>
-      <li><a href="mailto:adarshkumarsinghmac@gmail.com" class="contact-button">Contact Us</a></li>
+      <li><a href="mailto:devadarshkumarsingh@gmail.com" class="contact-button">Contact Us</a></li>
       <li><button @click="toggleTheme" class="text-white">{{ isDark ? 'Light' : 'Dark' }} Mode</button></li>
     </ul>
   </nav>
@@ -375,12 +377,13 @@
 
 <!-- 📢 Temporary Notice Bar -->
 <div id="notice-banner" style="display:none;position:fixed;top:0;left:0;width:100%;background:#222;color:#fff;text-align:center;padding:10px 15px;font-size:15px;z-index:10000;border-bottom:2px solid #00f0ff;font-family:'Segoe UI',sans-serif;">
-  ⚠️ Due to health issues, I couldn’t upload the Work, Power & Energy in the Physics, Hindi, and Maths work. It will be uploaded on 10th April before 12:00 PM. <br/>Thank you for your patience — sorry for the inconvenience!
+  ⚠️ Notice:
+Docro has been fully updated. All written work of all Subjects for March and April are now available.This is the final and current version of the website; new content will be added as required.<br/>
 </div>
 
 <script>
   // Toggle this to true/false to show/hide the notice
-  const showNotice = false;
+  const showNotice = true;
 
   if (showNotice) {
     document.getElementById('notice-banner').style.display = 'block';
@@ -411,7 +414,7 @@
           <span class="w-full md:w-auto mb-2 md:mb-0">{{ pdf.title }}</span>
           <div>
             <a :href="pdf.link" target="_blank" class="btn btn-outline-primary btn-sm">View</a>
-            <a :href="pdf.link" download class="btn btn-outline-success btn-sm ml-2">Download</a>
+            
           </div>
         </li>
       </ul>
@@ -468,13 +471,13 @@ const app = Vue.createApp({
         "English Language": [ { title: "Complete English Language till 8th April 25.X.", link: "https://drive.google.com/file/d/1qMz6qT6frB9vV0MccTaevHoNsePdPNQ6/view?usp=sharing" } ],
         "English Literature": [ { title: "Full Haunted House. X-F", link: "https://drive.google.com/file/d/1kdtwT3P0LnBtXY7_a8TN_KMz7SQhFQ0O/view?usp=sharing" }, { title: "Complete Prose With The Photographer.", link: "https://drive.google.com/file/d/1IEq0oZa6JqHrDd0fNQn2yfJ1-bnqB6ru/view?usp=sharing" }   ],
         "Hindi": [ { title: "Full Hindi Language. X-F. ", link: "https://drive.google.com/file/d/1pwwfnAnJQYJn9zPcDxKpIll4b9d9FAa8/view?usp=sharing" }, { title: "Complete Work Bhed And Bhediya Hindi ( Sahitya Sagar ) X.", link: "https://drive.google.com/file/d/1WCtNAX2A-Yhd3mAbqjphPL9eiJ94piu5/view?usp=sharing" } ],
-        "Computer": [ { title: "COMPLETE Computer till the 8th Apr.... X-f", link: "https://drive.google.com/file/d/1m2sb7IKblhkjLe55_yrer73XWuZc2tQ_/view?usp=sharing" } ],
+        "Computer Applications": [ { title: "COMPLETE Computer till the 8th Apr.... X-f", link: "https://drive.google.com/file/d/1m2sb7IKblhkjLe55_yrer73XWuZc2tQ_/view?usp=sharing" } ],
         "Physics": [ { title: "Ch-1 & 2 Full Xf", link: "https://drive.google.com/file/d/18fG5GFQ275slAzSxJJ_aOC3P2z39Ny8P/view?usp=sharing" } ],
         "Chemistry": [ { title: "New Pdf Ch-1 & Ch-2 Full  X....", link: "https://drive.google.com/file/d/1E2xZilTmnAO0TPPTgVertvk7zwNOH1PV/view?usp=sharing" } ],
         "Biology": [ { title: "The Cell 1. Ch-I. X-F.", link: "https://drive.google.com/file/d/1ZiCdFp-qS0o3PfjRbdaPrOL7hDX2gh1n/view?usp=sharing" },{ title: "Ch-2 Structure of Chromosomes, Cell Cycle And Cell Division. X-F. 2025", link: "https://drive.google.com/file/d/1M3OQG-ikbjmNRf3j1E0gAxo7M9xDfijG/view?usp=sharing" }],
-        "History": [ { title: "Ch-1 The First War of Independence 1867 Complete Chapter. X....", link: "https://drive.google.com/file/d/136REqL2lnO1z6VmH3-pU9EJT6SDR7nHC/view?usp=sharing" } ],
+        "History & Civics": [ { title: "Ch-1 The First War of Independence 1867 Complete Chapter. X....", link: "https://drive.google.com/file/d/136REqL2lnO1z6VmH3-pU9EJT6SDR7nHC/view?usp=sharing" } ],
         "Geography": [ { title: "No Pdf Yet.", link: "https://example.com/.pdf" } ],
-        "Diary": [ { title: "No Pdf Yet.", link: "https://example.com/diary.pdf" } ]
+        
       }
     }
   },
